@@ -182,6 +182,7 @@ void JtagAnalyzerResults::GenerateExportFile(const char* file, DisplayBase displ
 
 void JtagAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase display_base)
 {
+#if FALSE
     ClearTabularText();
 
     Frame f = GetFrame(frame_index);
@@ -246,7 +247,7 @@ void JtagAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase 
     {
         AddTabularText( result_strings[i].c_str());
     }
-
+#endif
 }
 
 void JtagAnalyzerResults::GeneratePacketTabularText(U64 packet_id, DisplayBase display_base)

@@ -1,0 +1,7 @@
+Visual Studio 2015/Debug
+Visual Studio 2015/Release
+*.sdf
+*.VC.opendb
+.vs
+*.sln.ecd
+*.vcxproj.filters
