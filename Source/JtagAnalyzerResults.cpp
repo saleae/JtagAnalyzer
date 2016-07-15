@@ -182,6 +182,8 @@ void JtagAnalyzerResults::GenerateExportFile(const char* file, DisplayBase displ
 
 void JtagAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase display_base)
 {
+	//The fuctions ClearTabularText and AddTabularText did not exist in the 1.1.14 SDK, but do exist in the latest release. This is used for protocol search results.
+#ifndef LEGACY_ANALYZER
     ClearTabularText();
 
     Frame f = GetFrame(frame_index);
@@ -246,7 +248,7 @@ void JtagAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase 
     {
         AddTabularText( result_strings[i].c_str());
     }
-
+#endif
 }
 
 void JtagAnalyzerResults::GeneratePacketTabularText(U64 packet_id, DisplayBase display_base)
