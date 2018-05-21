@@ -59,24 +59,26 @@ public:
 // Contains data that is being shifted on TDI/TDO, and functions for converting that data to strings
 struct JtagShiftedData
 {
+	enum class TdiTdoStringFormat { SingleString, Break64, Ellipsis64, Break256, Ellipsis256 };
+
 	U64		mStartSampleIndex;
 
 	std::vector<U8>		mTdiBits;
 	std::vector<U8>		mTdoBits;
 
-	static std::string GetStringFromBitStates(const std::vector<U8>& bits, DisplayBase display_base);
+	static std::string GetStringFromBitStates(const std::vector<U8>& bits, DisplayBase display_base, TdiTdoStringFormat format );
 	static std::string GetDecimalString(const std::vector<U8>& bits);
 	static std::string GetASCIIString(const std::vector<U8>& bits);
 	static std::string GetHexOrBinaryString(const std::vector<U8>& bits, DisplayBase display_base);
 
-	std::string GetTDIString(DisplayBase display_base) const
+	std::string GetTDIString(DisplayBase display_base, TdiTdoStringFormat format = TdiTdoStringFormat::SingleString ) const
 	{
-		return GetStringFromBitStates(mTdiBits, display_base);
+		return GetStringFromBitStates(mTdiBits, display_base, format );
 	}
 
-	std::string GetTDOString(DisplayBase display_base) const
+	std::string GetTDOString(DisplayBase display_base, TdiTdoStringFormat format = TdiTdoStringFormat::SingleString ) const
 	{
-		return GetStringFromBitStates(mTdoBits, display_base);
+		return GetStringFromBitStates(mTdoBits, display_base, format );
 	}
 
 	std::string GetTDILengthString( bool with_parentheses = true ) const

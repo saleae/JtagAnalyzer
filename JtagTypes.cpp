@@ -148,8 +148,43 @@ std::string JtagShiftedData::GetHexOrBinaryString(const std::vector<U8>& bits, D
 	return ret_val;
 }
 
-std::string JtagShiftedData::GetStringFromBitStates(const std::vector<U8>& bits, DisplayBase display_base)
+std::string JtagShiftedData::GetStringFromBitStates(const std::vector<U8>& bits, DisplayBase display_base, TdiTdoStringFormat format )
 {
+	if ( format == TdiTdoStringFormat::Ellipsis64 && bits.size() > 64 )
+	{
+		std::vector<U8> subset( bits.end() - 64, bits.end() );
+		return GetStringFromBitStates( subset, display_base, format ) + "...";
+	}
+
+	if ( format == TdiTdoStringFormat::Ellipsis256 && bits.size() > 256 )
+	{
+		std::vector<U8> subset( bits.end() - 256, bits.end() );
+		return GetStringFromBitStates( subset, display_base, format ) + "...";
+	}
+
+	if ( ( format == TdiTdoStringFormat::Break64 && bits.size() > 64 ) ||
+		( format == TdiTdoStringFormat::Break256 && bits.size() > 256 ) )
+	{
+		//lets break the result into N shorter strings of length range_size.
+		//data is transmitted LSB first, as a signle, huge word. lets write out the data with the lower word first.
+		S32 range_size = ( format == TdiTdoStringFormat::Break64 ) ? 64 : 256;
+
+		S32 range_end = bits.size();
+		std::string result = "";
+		while ( range_end > 0 )
+		{
+			S32 range_start = std::max( range_end - range_size, 0 );
+			std::vector<U8> subset( bits.begin() + range_start, bits.begin() + range_end );
+			range_end -= range_size;
+
+			result += "[" + GetStringFromBitStates( subset, display_base, format ) + "]";
+			if ( range_end > 0 )
+				result += ", ";
+		}
+
+		return result;
+	}
+
 	std::string ret_val;
 
 	if (bits.size() > 64)

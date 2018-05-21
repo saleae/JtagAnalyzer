@@ -81,7 +81,7 @@ void JtagAnalyzerResults::GenerateBubbleText(U64 frame_index, Channel& channel, 
 		// found?
 		if( sdi != mShiftedData.end() )
 		{
-			std::string tdi_tdo_result_string = ( channel == mSettings->mTdiChannel ? sdi->GetTDIString( display_base ).c_str() : sdi->GetTDOString( display_base ).c_str() );
+			std::string tdi_tdo_result_string = ( channel == mSettings->mTdiChannel ? sdi->GetTDIString( display_base, JtagShiftedData::TdiTdoStringFormat::Ellipsis256 ).c_str() : sdi->GetTDOString( display_base, JtagShiftedData::TdiTdoStringFormat::Ellipsis256 ).c_str() );
 
 			if( mSettings->mShowBitCount )
 			{
@@ -154,8 +154,8 @@ void JtagAnalyzerResults::GenerateExportFile(const char* file, DisplayBase displ
 			// found?
 			if (sdi != mShiftedData.end())
 			{
-				tdi_str = sdi->GetTDIString(display_base);
-				tdo_str = sdi->GetTDOString(display_base);
+				tdi_str = sdi->GetTDIString(display_base, JtagShiftedData::TdiTdoStringFormat::Break64 );
+				tdo_str = sdi->GetTDOString(display_base, JtagShiftedData::TdiTdoStringFormat::Break64 );
 
 				if( mSettings->mShowBitCount )
 				{
@@ -222,7 +222,7 @@ void JtagAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase 
         {
 			if( tdi_used == true )
 			{
-				std::string tdi_str = sdi->GetTDIString( display_base );
+				std::string tdi_str = sdi->GetTDIString( display_base, JtagShiftedData::TdiTdoStringFormat::Ellipsis256 );
 
 				if( mSettings->mShowBitCount )
 					tdi_str += " " + sdi->GetTDILengthString();
@@ -232,7 +232,7 @@ void JtagAnalyzerResults::GenerateFrameTabularText(U64 frame_index, DisplayBase 
 
 			if( tdo_used == true )
 			{
-				std::string tdo_str = sdi->GetTDOString( display_base );
+				std::string tdo_str = sdi->GetTDOString( display_base, JtagShiftedData::TdiTdoStringFormat::Ellipsis256 );
 
 				if( mSettings->mShowBitCount )
 					tdo_str += " " + sdi->GetTDOLengthString();
